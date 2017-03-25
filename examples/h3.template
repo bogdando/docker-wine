@@ -1,0 +1,13 @@
+#!/bin/bash
+
+export WINEPREFIX=${WINEPREFIX:-/home/docker/wine}
+export WINEARCH='win32'
+
+#winetricks directplay
+##winetricks allfonts
+#winecfg
+cd /opt/pr/Her3.59
+#wine /opt/pr/Her3.59/HD3_Launcher.exe
+wine /opt/pr/Her3.59/WogT1HD.exe
+
+exit $?

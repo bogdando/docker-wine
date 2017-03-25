@@ -1,0 +1,13 @@
+FROM plumbee/nvidia-virtualgl:2.5.2
+RUN echo && \ 
+  dpkg --add-architecture i386 && \
+  apt-get update && \
+  apt-get -y install software-properties-common curl cabextract && \
+  add-apt-repository -y ppa:wine/wine-builds && \
+  apt-get update && \
+  apt-get -y install --install-recommends libopenal1 && \
+  apt-get -y install --install-recommends wine-staging && \
+  apt-get -y install winehq-staging && \
+  curl -o winetricks https://raw.githubusercontent.com/Winetricks/winetricks/master/src/winetricks && \
+  install -Dm755 winetricks /usr/bin/winetricks && \
+  rm winetricks

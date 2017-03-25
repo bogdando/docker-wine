@@ -15,10 +15,10 @@ FROM yantis/virtualgl
 MAINTAINER Jonathan Yantis <yantis@yantis.net>
 
     # Update and force a refresh of all package lists even if they appear up to date.
-RUN pacman -Syyu --noconfirm && \
+RUN pacman -Syyu --force --noconfirm && \
 
     # Install Wine & Winetricks dependencies
-    pacman --noconfirm -S \
+    pacman --noconfirm --force -S \
     cabextract \
     lib32-gnutls \
     lib32-mpg123 \
@@ -30,7 +30,7 @@ RUN pacman -Syyu --noconfirm && \
     wine && \
 
     # Install samba for ntlm_auth
-    pacman --noconfirm -S samba --assume-installed python2 && \
+    pacman --noconfirm --force -S samba --assume-installed python2 && \
 
     # Install Winetricks from github as it is more recent.
     curl -o winetricks https://raw.githubusercontent.com/Winetricks/winetricks/master/src/winetricks && \
