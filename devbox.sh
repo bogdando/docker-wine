@@ -1,0 +1,45 @@
+#!/bin/bash                                                                                                                                                                       
+docker run \
+    -u $(id -u $USER):$(id -g $USER) \
+    -it \
+    --rm \
+    --privileged \
+    --net=host --uts=host --pid=host --ipc=host \
+    -e GPG_AGENT_INFO \
+    -e SSH_AUTH_SOCK \
+    -e DISPLAY \
+    -e XAUTHORITY=/tmp/.Xauthority \
+    -e LC_ALL=en_US.UTF-8 \
+    -e LANG=en_US.UTF-8 \
+    -e WINEPREFIX=/home/devbox/wine \
+    -v $(pwd)/lightdm.conf:/etc/lightdm/lightdm.conf:ro \
+    -v /var/run/docker.sock:/var/run/docker.sock \
+    -v /usr/bin/docker:/usr/bin/docker:ro \
+    -v /etc/passwd:/etc/passwd:ro \
+    -v /etc/group:/etc/group:ro \
+    -v /etc/shadow:/etc/shadow:ro \
+    -v /etc/sudoers:/etc/sudoers:ro \
+    -v /dev:/dev:ro \
+    -v /lib/modules:/lib/modules:ro \
+    -v /sys/fs/cgroup:/sys/fs/cgroup \
+    -v /var/lib/libvirt:/var/lib/libvirt \
+    -v /etc/apt/:/etc/apt/ \
+    -v /var/cache/apt:/var/cache/apt \
+    -v /opt/docker-data/wine/.cache:/home/devbox/.cache \
+    -v /opt/docker-data/wine:/home/devbox/wine \
+    -v $(pwd)/examples:/templates:ro \
+    -v /opt/pr:/opt/pr \
+    -v /opt/Projects:/opt/Projects \
+    -v /opt/oooq:/opt/oooq \
+    -v /opt/cache:/opt/cache \
+    -v /opt/bluejeans:/opt/bluejeans \
+    -v /opt/docker-data:/opt/docker-data \
+    -v /opt/google:/opt/google \
+    -v /opt/sublime_text_2:/opt/sublime_text_2 \
+    -v /opt/vagrant:/opt/vagrant \
+    -v /opt/zoom:/opt/zoom \
+    -v /usr/local/sbin/git_edit.sh:/usr/local/sbin/git_edit.sh:ro \
+    -v /usr/local/bin/virtualenvwrapper.sh:/usr/local/bin/virtualenvwrapper.sh:ro \
+    -v $HOME:/home/$USER \
+    --name devbox \
+    bogdando/devbox:v0.1 sudo vglrun /templates/devbox.template

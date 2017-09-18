@@ -1,0 +1,29 @@
+#!/bin/bash
+
+export WINEPREFIX=${WINEPREFIX:-/home/docker/wine}
+export WINEARCH='win32'
+
+#winetricks directplay
+##winetricks allfonts
+#winecfg
+
+# Replace hack for the host's dbus daemon (--pid=host)
+# Do not mount dbus run dir to not spoil it on host!
+mkdir -p /var/run/dbus
+rm -f /var/run/dbus/pid
+rm -f /var/run/dbus/system_bus_socket
+pkill -f dbus
+dbus-daemon --system
+
+# Prepare keyboard and mouse for X for udevd background
+# https://joshh.info/2017/xserver-in-docker-revisited/
+/lib/systemd/systemd-udevd --daemon
+udevadm trigger
+
+# Start X desktop manager in foreground
+touch /tmp/.Xauthority
+#lightdm --test-mode --debug
+/usr/bin/X -core :0 -seat seat0 -auth /var/run/lightdm/bogdando/:0 -nolisten tcp vt7 -novtswitch &
+sleep 3
+su bogdando -c unity
+

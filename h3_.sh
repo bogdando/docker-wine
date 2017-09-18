@@ -19,3 +19,4 @@ docker run \
     "useradd -u 1000 h3 -G root -s /bin/bash -d /home/h3; su h3 -s /bin/bash -c 'vglrun /templates/h3.template'"
 #    "useradd -u 1000 h3 -G root -s /bin/bash -d /home/h3; su h3 -c 'vglrun glxgears'"
 xhost -local:root
+sudo chown bogdando:bogdando ~/.Xauthority
