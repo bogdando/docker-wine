@@ -13,13 +13,15 @@ docker run \
     -e LANG=en_US.UTF-8 \
     -e WINEPREFIX=/home/devbox/wine \
     -v $(pwd)/lightdm.conf:/etc/lightdm/lightdm.conf:ro \
+    -v /etc/dbus-1:/etc/dbus-1 \
+    -v /run:/run \
     -v /var/run/docker.sock:/var/run/docker.sock \
     -v /usr/bin/docker:/usr/bin/docker:ro \
     -v /etc/passwd:/etc/passwd:ro \
     -v /etc/group:/etc/group:ro \
     -v /etc/shadow:/etc/shadow:ro \
     -v /etc/sudoers:/etc/sudoers:ro \
-    -v /dev:/dev:ro \
+    -v /dev:/dev \
     -v /lib/modules:/lib/modules:ro \
     -v /sys/fs/cgroup:/sys/fs/cgroup \
     -v /var/lib/libvirt:/var/lib/libvirt \

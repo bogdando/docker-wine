@@ -9,11 +9,11 @@ export WINEARCH='win32'
 
 # Replace hack for the host's dbus daemon (--pid=host)
 # Do not mount dbus run dir to not spoil it on host!
-mkdir -p /var/run/dbus
-rm -f /var/run/dbus/pid
-rm -f /var/run/dbus/system_bus_socket
-pkill -f dbus
-dbus-daemon --system
+#mkdir -p /var/run/dbus
+#rm -f /var/run/dbus/pid
+#rm -f /var/run/dbus/system_bus_socket
+#pkill -f dbus
+#dbus-daemon --system
 
 # Prepare keyboard and mouse for X for udevd background
 # https://joshh.info/2017/xserver-in-docker-revisited/
