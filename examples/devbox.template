@@ -1,5 +1,8 @@
 #!/bin/bash
 
+mkdir -p /usr/lib64/openvpn/plugins
+ln -s /usr/lib/openvpn/* /usr/lib64/openvpn/plugins
+
 export WINEPREFIX=${WINEPREFIX:-/home/docker/wine}
 export WINEARCH='win32'
 
