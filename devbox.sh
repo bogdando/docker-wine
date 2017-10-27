@@ -4,7 +4,9 @@ docker run \
     -it \
     --rm \
     --privileged \
+    --cap-add=ALL \
     --net=host --uts=host --pid=host --ipc=host \
+    --device /dev/snd \
     -e GPG_AGENT_INFO \
     -e SSH_AUTH_SOCK \
     -e DISPLAY \
@@ -22,7 +24,6 @@ docker run \
     -v /etc/shadow:/etc/shadow:ro \
     -v /etc/sudoers:/etc/sudoers:ro \
     -v /dev:/dev \
-    -v /lib/modules:/lib/modules:ro \
     -v /sys/fs/cgroup:/sys/fs/cgroup \
     -v /var/lib/libvirt:/var/lib/libvirt \
     -v /etc/apt/:/etc/apt/ \
