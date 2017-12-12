@@ -1,6 +1,6 @@
 #!/bin/bash                                                                                                                                                                       
 docker run \
-    -u $(id -u $USER):$(id -g $USER) \
+    -u $(id -u $USER) \
     -itd \
     --privileged \
     --cap-add=ALL \
@@ -12,19 +12,17 @@ docker run \
     -e LC_ALL=en_US.UTF-8 \
     -e LANG=en_US.UTF-8 \
     -e WINEPREFIX=/home/devbox/wine \
-    -v $(pwd)/lightdm.conf:/etc/lightdm/lightdm.conf:ro \
     -v $(pwd)/resolv.conf:/etc/resolv.conf:ro \
     -v /etc/NetworkManager/dnsmasq.d:/etc/NetworkManager/dnsmasq.d:ro \
     -v /etc/dbus-1:/etc/dbus-1 \
     -v /etc/default/keyboard:/etc/default/keyboard:ro \
     -v /run:/run \
-    -v /var/run/docker.sock:/var/run/docker.sock \
     -v /usr/bin/docker:/usr/bin/docker:ro \
     -v /etc/passwd:/etc/passwd:ro \
     -v /etc/group:/etc/group:ro \
     -v /etc/shadow:/etc/shadow:ro \
     -v /etc/sudoers:/etc/sudoers:ro \
-    -v /dev:/dev \
+    -v /dev:/dev:ro \
     -v /sys/fs/cgroup:/sys/fs/cgroup \
     -v /var/lib/libvirt:/var/lib/libvirt \
     -v /etc/apt/:/etc/apt/ \

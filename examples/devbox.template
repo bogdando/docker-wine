@@ -23,10 +23,31 @@ export WINEARCH='win32'
 /lib/systemd/systemd-udevd --daemon
 udevadm trigger
 
+/usr/sbin/cupsd -l &
+/usr/sbin/cups-browsed &
+
 # Start X desktop manager in foreground
 touch /tmp/.Xauthority
 #lightdm --test-mode --debug
 /usr/bin/X -core :0 -seat seat0 -auth /var/run/lightdm/bogdando/:0 -nolisten tcp vt7 -novtswitch &
 sleep 3
+
+export XDG_RUNTIME_DIR=/run/user/1000
+export DISPLAY=:0
+# Nothing picks up autostart configs, so do it manually
+bash -c "sleep 5; gnome-settings-daemon" &
+bash -c "sleep 5; /usr/lib/policykit-1-gnome/polkit-gnome-authentication-agent-1" &
+su bogdando -c "sleep 5; DISPLAY=:0 /usr/lib/x86_64-linux-gnu/unity/unity-panel-service" &
+su bogdando -c "sleep 5; DISPLAY=:0 /usr/lib/x86_64-linux-gnu/indicator-keyboard/indicator-keyboard-service" &
+su bogdando -c "sleep 5; DISPLAY=:0 /usr/lib/x86_64-linux-gnu/indicator-printers/indicator-printers-service" &
+su bogdando -c "sleep 5; DISPLAY=:0 /usr/lib/x86_64-linux-gnu/indicator-power/indicator-power-service" &
+su bogdando -c "sleep 5; DISPLAY=:0 /usr/lib/x86_64-linux-gnu/indicator-datetime/indicator-datetime-service" &
+su bogdando -c "sleep 5; DISPLAY=:0 /usr/lib/x86_64-linux-gnu/indicator-sound/indicator-sound-service" &
+su bogdando -c "sleep 5; DISPLAY=:0 /usr/lib/x86_64-linux-gnu/indicator-session/indicator-session-service" &
+su bogdando -c "sleep 5; DISPLAY=:0 nm-applet --sm-disable" &
+su bogdando -c "sleep 10; DISPLAY=:0 system-config-printer-applet" &
+su bogdando -c "sleep 10; DISPLAY=:0 /home/bogdando/.dropbox-dist/dropboxd" &
+bash -c "sleep 10; sudo kill -HUP $(pgrep -f NetworkManager)" &
+
 su bogdando -c unity
 
