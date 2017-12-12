@@ -16,6 +16,7 @@ docker run \
     -v $(pwd)/resolv.conf:/etc/resolv.conf:ro \
     -v /etc/NetworkManager/dnsmasq.d:/etc/NetworkManager/dnsmasq.d:ro \
     -v /etc/dbus-1:/etc/dbus-1 \
+    -v /etc/default/keyboard:/etc/default/keyboard:ro \
     -v /run:/run \
     -v /var/run/docker.sock:/var/run/docker.sock \
     -v /usr/bin/docker:/usr/bin/docker:ro \
@@ -39,6 +40,7 @@ docker run \
     -v /opt/sublime_text_2:/opt/sublime_text_2 \
     -v /opt/vagrant:/opt/vagrant \
     -v /opt/zoom:/opt/zoom \
+    -v /opt/.virtualenvs:/opt/.virtualenvs \
     -v /usr/bin/p4merge:/usr/bin/p4merge:ro \
     -v /usr/bin/p4merge.bin:/usr/bin/p4merge.bin:ro \
     -v /usr/lib/p4v:/usr/lib/p4v:ro \
