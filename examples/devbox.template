@@ -49,5 +49,5 @@ su bogdando -c "sleep 10; DISPLAY=:0 system-config-printer-applet" &
 su bogdando -c "sleep 10; DISPLAY=:0 /home/bogdando/.dropbox-dist/dropboxd" &
 bash -c "sleep 10; sudo kill -HUP $(pgrep -f NetworkManager)" &
 
-su bogdando -c unity
+sudo vglrun su bogdando -c unity
 
