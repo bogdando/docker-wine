@@ -54,7 +54,7 @@ docker run \
     -v /usr/local/bin/virtualenvwrapper.sh:/usr/local/bin/virtualenvwrapper.sh:ro \
     -v $HOME:/home/$USER \
     --name devbox \
-    bogdando/devbox:v0.1 sudo vglrun /templates/devbox.template
+    bogdando/devbox sudo vglrun /templates/devbox.template
     
 #-v /opt/docker-data/wine/.cache:/home/devbox/.cache \
 #-v /opt/docker-data/wine:/home/devbox/wine \
