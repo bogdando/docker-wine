@@ -29,7 +29,7 @@ udevadm trigger
 # Start X desktop manager in foreground
 touch /tmp/.Xauthority
 #lightdm --test-mode --debug
-/usr/bin/X -core :0 -seat seat0 -auth /var/run/lightdm/bogdando/:0 -nolisten tcp vt7 -novtswitch &
+vglrun /usr/bin/X -core :0 -seat seat0 -nolisten tcp vt7 -novtswitch &
 sleep 3
 
 export XDG_RUNTIME_DIR=/run/user/1000
@@ -49,5 +49,5 @@ su bogdando -c "sleep 10; DISPLAY=:0 system-config-printer-applet" &
 su bogdando -c "sleep 10; DISPLAY=:0 /home/bogdando/.dropbox-dist/dropboxd" &
 bash -c "sleep 10; sudo kill -HUP $(pgrep -f NetworkManager)" &
 
-sudo vglrun su bogdando -c unity
+su bogdando -c "vglrun unity"
 
