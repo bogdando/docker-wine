@@ -1,30 +1,27 @@
 #!/bin/bash                                                                                                                                                                       
+# $USER must be a member of the host's sudo,docker,libvirtd,audio,video groups
 # These are specific to the host, like nvidia-304 driver installed
 nver=384.98
 DOCKER_VISUAL_NVIDIA="-v /usr/lib/x86_64-linux-gnu/libXau.so.6.0.0:/usr/lib/x86_64-linux-gnu/libXau.so.6.0.0:ro -v /usr/lib/x86_64-linux-gnu/libXdmcp.so.6:/usr/lib/x86_64-linux-gnu/libXdmcp.so.6:ro -v /usr/lib/x86_64-linux-gnu/libXext.so.6:/usr/lib/x86_64-linux-gnu/libXext.so.6:ro -v /usr/lib/x86_64-linux-gnu/libXdmcp.so.6.0.0:/usr/lib/x86_64-linux-gnu/libXdmcp.so.6.0.0:ro -v /usr/lib/x86_64-linux-gnu/libX11.so.6.3.0:/usr/lib/x86_64-linux-gnu/libX11.so.6.3.0:ro -v /usr/lib/x86_64-linux-gnu/libxcb.so.1:/usr/lib/x86_64-linux-gnu/libxcb.so.1:ro -v /usr/lib/nvidia-${nver%.*}:/usr/lib/nvidia-${nver%.*}:ro"
 docker run \
     -u $(id -u $USER):$(id -g $USER) \
-    --group-add video \
-    --group-add audio \
-    --group-add sudo \
-    --group-add $(getent group libvirtd | awk -F':' '{print $3}') \
-    --group-add $(getent group docker | awk -F':' '{print $3}') \
     -itd \
     --privileged \
     --cap-add=ALL \
     --net=host --uts=host --pid=host --ipc=host \
-    -e DISPLAY \
-    -e VGL_DISPLAY \
+    -e DISPLAY=:0 \
     ${DOCKER_VISUAL_NVIDIA} \
     -e XAUTHORITY=/tmp/.Xauthority \
     -e LC_ALL=en_US.UTF-8 \
     -e LANG=en_US.UTF-8 \
     -e WINEPREFIX=/home/devbox/wine \
     -v $(pwd)/resolv.conf:/etc/resolv.conf:ro \
+    -v $(pwd)/20-intel.conf:/usr/share/X11/xorg.conf.d/20-intel.conf:ro \
     -v /etc/NetworkManager/dnsmasq.d:/etc/NetworkManager/dnsmasq.d:ro \
     -v /etc/dbus-1:/etc/dbus-1 \
     -v /etc/default/keyboard:/etc/default/keyboard:ro \
-    -v /run:/run \
+    -v /run/libvirt:/run/libvirt \
+    -v /run/docker:/run/docker \
     -v /usr/bin/docker:/usr/bin/docker:ro \
     -v /etc/passwd:/etc/passwd:ro \
     -v /etc/group:/etc/group:ro \
@@ -55,7 +52,7 @@ docker run \
     -v /usr/local/bin/virtualenvwrapper.sh:/usr/local/bin/virtualenvwrapper.sh:ro \
     -v $HOME:/home/$USER \
     --name devbox \
-    bogdando/devbox sudo vglrun /templates/devbox.template
+    bogdando/devbox sudo /templates/devbox.template
     
 #-v /opt/docker-data/wine/.cache:/home/devbox/.cache \
 #-v /opt/docker-data/wine:/home/devbox/wine \
