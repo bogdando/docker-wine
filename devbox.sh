@@ -1,7 +1,7 @@
 #!/bin/bash                                                                                                                                                                       
 # These are specific to the host, like nvidia-304 driver installed
-nver=387.34
-DOCKER_VISUAL_NVIDIA="-v /usr/lib/x86_64-linux-gnu/libXau.so.6.0.0:/external_libs/libXau.so.6.0.0:ro -v /usr/lib/x86_64-linux-gnu/libXdmcp.so.6:/external_libs/libXdmcp.so.6:ro -v /usr/lib/x86_64-linux-gnu/libXext.so.6:/external_libs/libXext.so.6:ro -v /usr/lib/x86_64-linux-gnu/libXdmcp.so.6.0.0:/external_libs/libXdmcp.so.6.0.0:ro -v /usr/lib/x86_64-linux-gnu/libX11.so.6.3.0:/external_libs/libX11.so.6.3.0:ro -v /usr/lib/x86_64-linux-gnu/libxcb.so.1:/external_libs/libxcb.so.1:ro -v /usr/lib/nvidia-${nver%.*}/libGL.so.${nver}:/external_libs/libGL.so.${nver}:ro -v /usr/lib/nvidia-${nver%.*}/libnvidia-glcore.so.${nver}:/external_libs/libnvidia-glcore.so.${nver}:ro -v /usr/lib/nvidia-${nver%.*}/libGL.so.1:/external_libs/libGL.so.1:ro -v /usr/lib/x86_64-linux-gnu/libXext.so.6.4.0:/external_libs/libXext.so.6.4.0:ro -v /usr/lib/x86_64-linux-gnu/libxcb.so.1.1.0:/external_libs/libxcb.so.1.1.0:ro -v /usr/lib/x86_64-linux-gnu/libX11.so.6:/external_libs/libX11.so.6:ro -v /usr/lib/x86_64-linux-gnu/libXau.so.6:/external_libs/libXau.so.6:ro -v /usr/lib/nvidia-${nver%.*}/tls/libnvidia-tls.so.${nver}:/external_libs/libnvidia-tls.so.${nver}:ro -v /usr/lib/x86_64-linux-gnu/libXv.so.1:/external_libs/libXv.so.1:ro --env=LD_LIBRARY_PATH=/external_libs"
+nver=384.98
+DOCKER_VISUAL_NVIDIA="-v /usr/lib/x86_64-linux-gnu/libXau.so.6.0.0:/usr/lib/x86_64-linux-gnu/libXau.so.6.0.0:ro -v /usr/lib/x86_64-linux-gnu/libXdmcp.so.6:/usr/lib/x86_64-linux-gnu/libXdmcp.so.6:ro -v /usr/lib/x86_64-linux-gnu/libXext.so.6:/usr/lib/x86_64-linux-gnu/libXext.so.6:ro -v /usr/lib/x86_64-linux-gnu/libXdmcp.so.6.0.0:/usr/lib/x86_64-linux-gnu/libXdmcp.so.6.0.0:ro -v /usr/lib/x86_64-linux-gnu/libX11.so.6.3.0:/usr/lib/x86_64-linux-gnu/libX11.so.6.3.0:ro -v /usr/lib/x86_64-linux-gnu/libxcb.so.1:/usr/lib/x86_64-linux-gnu/libxcb.so.1:ro -v /usr/lib/nvidia-${nver%.*}:/usr/lib/nvidia-${nver%.*}:ro"
 docker run \
     -u $(id -u $USER):$(id -g $USER) \
     --group-add video \
@@ -13,8 +13,8 @@ docker run \
     --privileged \
     --cap-add=ALL \
     --net=host --uts=host --pid=host --ipc=host \
-    -e DISPLAY=:0 \
-    -e VGL_DISPLAY=:0 \
+    -e DISPLAY \
+    -e VGL_DISPLAY \
     ${DOCKER_VISUAL_NVIDIA} \
     -e XAUTHORITY=/tmp/.Xauthority \
     -e LC_ALL=en_US.UTF-8 \
