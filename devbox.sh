@@ -2,7 +2,7 @@
 # $USER must be a member of the host's sudo,docker,libvirtd,audio,video groups
 # These are specific to the host, like nvidia-304 driver installed
 nver=384.98
-DOCKER_VISUAL_NVIDIA="-v /usr/lib/x86_64-linux-gnu/libXau.so.6.0.0:/usr/lib/x86_64-linux-gnu/libXau.so.6.0.0:ro -v /usr/lib/x86_64-linux-gnu/libXdmcp.so.6:/usr/lib/x86_64-linux-gnu/libXdmcp.so.6:ro -v /usr/lib/x86_64-linux-gnu/libXext.so.6:/usr/lib/x86_64-linux-gnu/libXext.so.6:ro -v /usr/lib/x86_64-linux-gnu/libXdmcp.so.6.0.0:/usr/lib/x86_64-linux-gnu/libXdmcp.so.6.0.0:ro -v /usr/lib/x86_64-linux-gnu/libX11.so.6.3.0:/usr/lib/x86_64-linux-gnu/libX11.so.6.3.0:ro -v /usr/lib/x86_64-linux-gnu/libxcb.so.1:/usr/lib/x86_64-linux-gnu/libxcb.so.1:ro -v /usr/lib/nvidia-${nver%.*}:/usr/lib/nvidia-${nver%.*}:ro"
+DOCKER_VISUAL_NVIDIA="-v /usr/lib/x86_64-linux-gnu/libXau.so.6.0.0:/usr/lib/x86_64-linux-gnu/libXau.so.6.0.0:ro -v /usr/lib/x86_64-linux-gnu/libXdmcp.so.6:/usr/lib/x86_64-linux-gnu/libXdmcp.so.6:ro -v /usr/lib/x86_64-linux-gnu/libXext.so.6:/usr/lib/x86_64-linux-gnu/libXext.so.6:ro -v /usr/lib/x86_64-linux-gnu/libXdmcp.so.6.0.0:/usr/lib/x86_64-linux-gnu/libXdmcp.so.6.0.0:ro -v /usr/lib/x86_64-linux-gnu/libX11.so.6.3.0:/usr/lib/x86_64-linux-gnu/libX11.so.6.3.0:ro -v /usr/lib/x86_64-linux-gnu/libxcb.so.1:/usr/lib/x86_64-linux-gnu/libxcb.so.1:ro -v /usr/lib/nvidia-${nver%.*}:/usr/lib/nvidia-${nver%.*}:ro -v /usr/lib32/nvidia-${nver%.*}:/usr/lib32/nvidia-${nver%.*}:ro"
 docker run \
     -u $(id -u $USER):$(id -g $USER) \
     -itd \
@@ -10,11 +10,12 @@ docker run \
     --cap-add=ALL \
     --net=host --uts=host --pid=host --ipc=host \
     -e DISPLAY=:0 \
-    ${DOCKER_VISUAL_NVIDIA} \
     -e XAUTHORITY=/tmp/.Xauthority \
     -e LC_ALL=en_US.UTF-8 \
     -e LANG=en_US.UTF-8 \
     -e WINEPREFIX=/home/devbox/wine \
+    -e LD_LIBRARY_PATH="${LD_LIBRARY_PATH}:/usr/lib/nvidia-${nver%.*}:/usr/lib32/nvidia-${nver%.*}" \
+    ${DOCKER_VISUAL_NVIDIA} \
     -v $(pwd)/resolv.conf:/etc/resolv.conf:ro \
     -v $(pwd)/20-intel.conf:/usr/share/X11/xorg.conf.d/20-intel.conf:ro \
     -v /etc/NetworkManager/dnsmasq.d:/etc/NetworkManager/dnsmasq.d:ro \
