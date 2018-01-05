@@ -23,6 +23,7 @@ docker run \
     -v /etc/NetworkManager/dnsmasq.d:/etc/NetworkManager/dnsmasq.d:ro \
     -v /etc/dbus-1:/etc/dbus-1 \
     -v /etc/default/keyboard:/etc/default/keyboard:ro \
+    -v /run/user/1000:/run/user/1000 \
     -v /run/libvirt:/run/libvirt \
     -v /run/docker:/run/docker:ro \
     -v /run/docker.pid:/run/docker.pid:ro \

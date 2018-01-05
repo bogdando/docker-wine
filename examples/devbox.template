@@ -29,9 +29,13 @@ udevadm trigger
 # Start X desktop manager in foreground
 touch /tmp/.Xauthority
 #lightdm --test-mode --debug
+Xorg -configure
+mkdir -p /etc/X11
+cp -f /home/bogdando/xorg.conf.new /etc/X11/xorg.conf
 /usr/bin/X -core ${D} -seat seat0 -nolisten tcp vt7 -novtswitch &
 sleep 3
 
+xhost +si:localuser:bogdando                                        
 export XDG_RUNTIME_DIR=/run/user/1000
 # Nothing picks up autostart configs, so do it manually
 su bogdando -c "sleep 5; DISPLAY=${D} /usr/lib/x86_64-linux-gnu/unity/unity-panel-service" &
