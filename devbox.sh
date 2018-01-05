@@ -2,7 +2,7 @@
 # $USER must be a member of the host's sudo,docker,libvirtd,audio,video groups
 # These are specific to the host, like nvidia-304 driver installed
 D=${1:-0}
-nver=384.98
+nver=340.104
 DOCKER_VISUAL_NVIDIA="-v /usr/lib/x86_64-linux-gnu/libXau.so.6.0.0:/usr/lib/x86_64-linux-gnu/libXau.so.6.0.0:ro -v /usr/lib/x86_64-linux-gnu/libXdmcp.so.6:/usr/lib/x86_64-linux-gnu/libXdmcp.so.6:ro -v /usr/lib/x86_64-linux-gnu/libXext.so.6:/usr/lib/x86_64-linux-gnu/libXext.so.6:ro -v /usr/lib/x86_64-linux-gnu/libXdmcp.so.6.0.0:/usr/lib/x86_64-linux-gnu/libXdmcp.so.6.0.0:ro -v /usr/lib/x86_64-linux-gnu/libX11.so.6.3.0:/usr/lib/x86_64-linux-gnu/libX11.so.6.3.0:ro -v /usr/lib/x86_64-linux-gnu/libxcb.so.1:/usr/lib/x86_64-linux-gnu/libxcb.so.1:ro -v /usr/lib/nvidia-${nver%.*}:/usr/lib/nvidia-${nver%.*}:ro -v /usr/lib32/nvidia-${nver%.*}:/usr/lib32/nvidia-${nver%.*}:ro"
 docker run \
     --runtime=nvidia \
@@ -39,6 +39,7 @@ docker run \
     -v /lib/modules:/lib/modules:ro \
     -v /etc/apt/:/etc/apt/ \
     -v /var/cache/apt:/var/cache/apt \
+    -v /var/log/devbox:/var/log \
     -v $(pwd)/examples:/templates:ro \
     -v /opt/pr:/opt/pr \
     -v /opt/Projects:/opt/Projects \
