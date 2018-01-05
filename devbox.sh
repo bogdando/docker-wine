@@ -24,7 +24,9 @@ docker run \
     -v /etc/dbus-1:/etc/dbus-1 \
     -v /etc/default/keyboard:/etc/default/keyboard:ro \
     -v /run/libvirt:/run/libvirt \
-    -v /run/docker:/run/docker \
+    -v /run/docker:/run/docker:ro \
+    -v /run/docker.pid:/run/docker.pid:ro \
+    -v /run/docker.sock:/run/docker.sock:ro \
     -v /usr/bin/docker:/usr/bin/docker:ro \
     -v /etc/passwd:/etc/passwd:ro \
     -v /etc/group:/etc/group:ro \
