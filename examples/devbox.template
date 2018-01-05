@@ -1,5 +1,5 @@
 #!/bin/bash
-
+D=${DISPLAY:-:0}
 mkdir -p /usr/lib64/openvpn/plugins
 ln -s /usr/lib/openvpn/* /usr/lib64/openvpn/plugins
 
@@ -29,21 +29,21 @@ udevadm trigger
 # Start X desktop manager in foreground
 touch /tmp/.Xauthority
 #lightdm --test-mode --debug
-/usr/bin/X -core :0 -seat seat0 -nolisten tcp vt7 -novtswitch &
+/usr/bin/X -core ${D} -seat seat0 -nolisten tcp vt7 -novtswitch &
 sleep 3
 
 export XDG_RUNTIME_DIR=/run/user/1000
 # Nothing picks up autostart configs, so do it manually
-su bogdando -c "sleep 5; DISPLAY=:0 /usr/lib/x86_64-linux-gnu/unity/unity-panel-service" &
-su bogdando -c "sleep 5; DISPLAY=:0 /usr/lib/x86_64-linux-gnu/indicator-keyboard/indicator-keyboard-service" &
-su bogdando -c "sleep 5; DISPLAY=:0 /usr/lib/x86_64-linux-gnu/indicator-printers/indicator-printers-service" &
-su bogdando -c "sleep 5; DISPLAY=:0 /usr/lib/x86_64-linux-gnu/indicator-power/indicator-power-service" &
-su bogdando -c "sleep 5; DISPLAY=:0 /usr/lib/x86_64-linux-gnu/indicator-datetime/indicator-datetime-service" &
-su bogdando -c "sleep 5; DISPLAY=:0 /usr/lib/x86_64-linux-gnu/indicator-sound/indicator-sound-service" &
-su bogdando -c "sleep 5; DISPLAY=:0 /usr/lib/x86_64-linux-gnu/indicator-session/indicator-session-service" &
-su bogdando -c "sleep 5; DISPLAY=:0 nm-applet --sm-disable" &
-su bogdando -c "sleep 10; DISPLAY=:0 system-config-printer-applet" &
-su bogdando -c "sleep 10; DISPLAY=:0 /home/bogdando/.dropbox-dist/dropboxd" &
+su bogdando -c "sleep 5; DISPLAY=${D} /usr/lib/x86_64-linux-gnu/unity/unity-panel-service" &
+su bogdando -c "sleep 5; DISPLAY=${D} /usr/lib/x86_64-linux-gnu/indicator-keyboard/indicator-keyboard-service" &
+su bogdando -c "sleep 5; DISPLAY=${D} /usr/lib/x86_64-linux-gnu/indicator-printers/indicator-printers-service" &
+su bogdando -c "sleep 5; DISPLAY=${D} /usr/lib/x86_64-linux-gnu/indicator-power/indicator-power-service" &
+su bogdando -c "sleep 5; DISPLAY=${D} /usr/lib/x86_64-linux-gnu/indicator-datetime/indicator-datetime-service" &
+su bogdando -c "sleep 5; DISPLAY=${D} /usr/lib/x86_64-linux-gnu/indicator-sound/indicator-sound-service" &
+su bogdando -c "sleep 5; DISPLAY=${D} /usr/lib/x86_64-linux-gnu/indicator-session/indicator-session-service" &
+su bogdando -c "sleep 5; DISPLAY=${D} nm-applet --sm-disable" &
+su bogdando -c "sleep 10; DISPLAY=${D} system-config-printer-applet" &
+su bogdando -c "sleep 10; DISPLAY=${D} /home/bogdando/.dropbox-dist/dropboxd" &
 bash -c "sleep 10; sudo kill -HUP $(pgrep -f NetworkManager)" &
 
 su bogdando -c unity

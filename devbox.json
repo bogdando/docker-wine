@@ -6,7 +6,6 @@
     "run_command": [
       "-tid",
       "--privileged",
-      "-u root",
       "-v",
       "/dev:/dev",
       "-v",
@@ -14,9 +13,10 @@
       "-v",
       "/lib/modules:/lib/modules:ro",
       "-v",
-      "-v /sys/fs/cgroup:/sys/fs/cgroup",
-      "-v /var/lib/libvirt:/var/lib/libvirt",
-      "bogdando/devbox",
+      "/sys/fs/cgroup:/sys/fs/cgroup",
+      "-v",
+      "/var/lib/libvirt:/var/lib/libvirt",
+      "{{.Image}}",
       "/bin/bash"
     ]
   }],
@@ -34,7 +34,7 @@
       {
         "type": "docker-tag",
         "only": ["docker"],
-        "repository": "bogdando/devbox:v0.1",
+        "repository": "bogdando/devbox",
         "tag": "latest",
         "keep_input_artifact": false
       }

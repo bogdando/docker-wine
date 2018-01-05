@@ -1,15 +1,17 @@
-#!/bin/bash                                                                                                                                                                       
+#!/bin/bash
 # $USER must be a member of the host's sudo,docker,libvirtd,audio,video groups
 # These are specific to the host, like nvidia-304 driver installed
+D=${1:-0}
 nver=384.98
 DOCKER_VISUAL_NVIDIA="-v /usr/lib/x86_64-linux-gnu/libXau.so.6.0.0:/usr/lib/x86_64-linux-gnu/libXau.so.6.0.0:ro -v /usr/lib/x86_64-linux-gnu/libXdmcp.so.6:/usr/lib/x86_64-linux-gnu/libXdmcp.so.6:ro -v /usr/lib/x86_64-linux-gnu/libXext.so.6:/usr/lib/x86_64-linux-gnu/libXext.so.6:ro -v /usr/lib/x86_64-linux-gnu/libXdmcp.so.6.0.0:/usr/lib/x86_64-linux-gnu/libXdmcp.so.6.0.0:ro -v /usr/lib/x86_64-linux-gnu/libX11.so.6.3.0:/usr/lib/x86_64-linux-gnu/libX11.so.6.3.0:ro -v /usr/lib/x86_64-linux-gnu/libxcb.so.1:/usr/lib/x86_64-linux-gnu/libxcb.so.1:ro -v /usr/lib/nvidia-${nver%.*}:/usr/lib/nvidia-${nver%.*}:ro -v /usr/lib32/nvidia-${nver%.*}:/usr/lib32/nvidia-${nver%.*}:ro"
 docker run \
+    --runtime=nvidia \
     -u $(id -u $USER):$(id -g $USER) \
     -itd \
     --privileged \
     --cap-add=ALL \
     --net=host --uts=host --pid=host --ipc=host \
-    -e DISPLAY=:0 \
+    -e DISPLAY=:${D} \
     -e XAUTHORITY=/tmp/.Xauthority \
     -e LC_ALL=en_US.UTF-8 \
     -e LANG=en_US.UTF-8 \
@@ -52,7 +54,7 @@ docker run \
     -v /usr/local/sbin/git_edit.sh:/usr/local/sbin/git_edit.sh:ro \
     -v /usr/local/bin/virtualenvwrapper.sh:/usr/local/bin/virtualenvwrapper.sh:ro \
     -v $HOME:/home/$USER \
-    --name devbox \
+    --name "devbox${D}" \
     bogdando/devbox sudo /templates/devbox.template
     
 #-v /opt/docker-data/wine/.cache:/home/devbox/.cache \
