@@ -1,9 +1,5 @@
 #!/bin/bash
 # $USER must be a member of the host's sudo,docker,libvirtd,audio,video groups
-# These are specific to the host, like nvidia-304 driver installed
-D=${1:-0}
-nver=340.104
-DOCKER_VISUAL_NVIDIA="-v /usr/lib/x86_64-linux-gnu/libXau.so.6.0.0:/usr/lib/x86_64-linux-gnu/libXau.so.6.0.0:ro -v /usr/lib/x86_64-linux-gnu/libXdmcp.so.6:/usr/lib/x86_64-linux-gnu/libXdmcp.so.6:ro -v /usr/lib/x86_64-linux-gnu/libXext.so.6:/usr/lib/x86_64-linux-gnu/libXext.so.6:ro -v /usr/lib/x86_64-linux-gnu/libXdmcp.so.6.0.0:/usr/lib/x86_64-linux-gnu/libXdmcp.so.6.0.0:ro -v /usr/lib/x86_64-linux-gnu/libX11.so.6.3.0:/usr/lib/x86_64-linux-gnu/libX11.so.6.3.0:ro -v /usr/lib/x86_64-linux-gnu/libxcb.so.1:/usr/lib/x86_64-linux-gnu/libxcb.so.1:ro -v /usr/lib/nvidia-${nver%.*}:/usr/lib/nvidia-${nver%.*}:ro -v /usr/lib32/nvidia-${nver%.*}:/usr/lib32/nvidia-${nver%.*}:ro"
 docker run \
     --runtime=nvidia \
     -u $(id -u $USER):$(id -g $USER) \
@@ -11,15 +7,15 @@ docker run \
     --privileged \
     --cap-add=ALL \
     --net=host --uts=host --pid=host --ipc=host \
-    -e DISPLAY=:${D} \
+    -e DISPLAY=:0 \
     -e XAUTHORITY=/tmp/.Xauthority \
     -e LC_ALL=en_US.UTF-8 \
     -e LANG=en_US.UTF-8 \
     -e WINEPREFIX=/home/devbox/wine \
-    -e LD_LIBRARY_PATH="${LD_LIBRARY_PATH}:/usr/lib/nvidia-${nver%.*}:/usr/lib32/nvidia-${nver%.*}" \
-    ${DOCKER_VISUAL_NVIDIA} \
     -v $(pwd)/resolv.conf:/etc/resolv.conf:ro \
     -v $(pwd)/20-intel.conf:/usr/share/X11/xorg.conf.d/20-intel.conf:ro \
+    -v $(pwd)/30-nvidia.conf:/usr/share/X11/xorg.conf.d/30-nvidia.conf:ro \
+    -v $(pwd)/10-xorg.conf:/usr/share/X11/xorg.conf.d/10-xorg.conf:ro \
     -v /etc/NetworkManager/dnsmasq.d:/etc/NetworkManager/dnsmasq.d:ro \
     -v /etc/dbus-1:/etc/dbus-1 \
     -v /etc/default/keyboard:/etc/default/keyboard:ro \
@@ -59,8 +55,8 @@ docker run \
     -v /usr/local/sbin/git_edit.sh:/usr/local/sbin/git_edit.sh:ro \
     -v /usr/local/bin/virtualenvwrapper.sh:/usr/local/bin/virtualenvwrapper.sh:ro \
     -v $HOME:/home/$USER \
-    --name "devbox${D}" \
-    bogdando/devbox sudo /templates/devbox.template
-    
+    --name devbox \
+    bogdando/devbox /templates/devbox.template
+
 #-v /opt/docker-data/wine/.cache:/home/devbox/.cache \
 #-v /opt/docker-data/wine:/home/devbox/wine \

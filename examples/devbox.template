@@ -1,10 +1,12 @@
-#!/bin/bash
-D=${DISPLAY:-:0}
-mkdir -p /usr/lib64/openvpn/plugins
-ln -s /usr/lib/openvpn/* /usr/lib64/openvpn/plugins
+#!/bin/bash -eux
+sudo mkdir -p /usr/lib64/openvpn/plugins
+sudo ln -s /usr/lib/openvpn/* /usr/lib64/openvpn/plugins
 
 export WINEPREFIX=${WINEPREFIX:-/home/docker/wine}
 export WINEARCH='win32'
+export DISPLAY=:0
+export XDG_RUNTIME_DIR=/run/user/1000
+export LIBGL_DEBUG=verbose
 
 #winetricks directplay
 ##winetricks allfonts
@@ -20,34 +22,34 @@ export WINEARCH='win32'
 
 # Prepare keyboard and mouse for X for udevd background
 # https://joshh.info/2017/xserver-in-docker-revisited/
-/lib/systemd/systemd-udevd --daemon
-udevadm trigger
+sudo /lib/systemd/systemd-udevd --daemon
+sudo udevadm trigger
 
-/usr/sbin/cupsd -l &
-/usr/sbin/cups-browsed &
+sudo /usr/sbin/cupsd -l &
+sudo /usr/sbin/cups-browsed &
 
 # Start X desktop manager in foreground
-touch /tmp/.Xauthority
-#lightdm --test-mode --debug
-Xorg -configure
-mkdir -p /etc/X11
-cp -f /home/bogdando/xorg.conf.new /etc/X11/xorg.conf
-/usr/bin/X -core ${D} -seat seat0 -nolisten tcp vt7 -novtswitch &
+sudo touch /tmp/.Xauthority
+sudo /usr/bin/X -core :0 -seat seat0 -nolisten tcp vt7 -novtswitch &
 sleep 3
 
-xhost +si:localuser:bogdando                                        
-export XDG_RUNTIME_DIR=/run/user/1000
-# Nothing picks up autostart configs, so do it manually
-su bogdando -c "sleep 5; DISPLAY=${D} /usr/lib/x86_64-linux-gnu/unity/unity-panel-service" &
-su bogdando -c "sleep 5; DISPLAY=${D} /usr/lib/x86_64-linux-gnu/indicator-keyboard/indicator-keyboard-service" &
-su bogdando -c "sleep 5; DISPLAY=${D} /usr/lib/x86_64-linux-gnu/indicator-printers/indicator-printers-service" &
-su bogdando -c "sleep 5; DISPLAY=${D} /usr/lib/x86_64-linux-gnu/indicator-power/indicator-power-service" &
-su bogdando -c "sleep 5; DISPLAY=${D} /usr/lib/x86_64-linux-gnu/indicator-datetime/indicator-datetime-service" &
-su bogdando -c "sleep 5; DISPLAY=${D} /usr/lib/x86_64-linux-gnu/indicator-sound/indicator-sound-service" &
-su bogdando -c "sleep 5; DISPLAY=${D} /usr/lib/x86_64-linux-gnu/indicator-session/indicator-session-service" &
-su bogdando -c "sleep 5; DISPLAY=${D} nm-applet --sm-disable" &
-su bogdando -c "sleep 10; DISPLAY=${D} system-config-printer-applet" &
-su bogdando -c "sleep 10; DISPLAY=${D} /home/bogdando/.dropbox-dist/dropboxd" &
-bash -c "sleep 10; sudo kill -HUP $(pgrep -f NetworkManager)" &
+sudo nvidia-settings -g
+#sudo nvidia-xconfig --query-gpu-info
+sudo nvidia-settings -w -r -V
 
-su bogdando -c unity
+# Nothing picks up autostart configs, so do it manually
+#glxgears || vglrun glxgears || sudo bash -c "DISPLAY=:0 glxgears" || sudo bash -c "DISPLAY=:0 vglrun glxgears"
+bash -c "sleep 5; DISPLAY=:0 /usr/lib/x86_64-linux-gnu/unity/unity-panel-service" &
+bash -c "sleep 5; DISPLAY=:0 /usr/lib/x86_64-linux-gnu/indicator-keyboard/indicator-keyboard-service" &
+bash -c "sleep 5; DISPLAY=:0 /usr/lib/x86_64-linux-gnu/indicator-printers/indicator-printers-service" &
+bash -c "sleep 5; DISPLAY=:0 /usr/lib/x86_64-linux-gnu/indicator-power/indicator-power-service" &
+bash -c "sleep 5; DISPLAY=:0 /usr/lib/x86_64-linux-gnu/indicator-datetime/indicator-datetime-service" &
+bash -c "sleep 5; DISPLAY=:0 /usr/lib/x86_64-linux-gnu/indicator-sound/indicator-sound-service" &
+bash -c "sleep 5; DISPLAY=:0 /usr/lib/x86_64-linux-gnu/indicator-session/indicator-session-service" &
+bash -c "sleep 5; DISPLAY=:0 nm-applet --sm-disable" &
+bash -c "sleep 10; DISPLAY=:0 system-config-printer-applet" &
+bash -c "sleep 10; DISPLAY=:0 /home/bogdando/.dropbox-dist/dropboxd" &
+bash -c "sleep 10; DISPLAY=:0 gnome-settings-daemon" &
+sudo bash -c "sleep 10; sudo kill -HUP $(pgrep -f NetworkManager)" &
+
+unity
