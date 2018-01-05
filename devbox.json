@@ -1,0 +1,43 @@
+{
+  "builders": [{
+    "type": "docker",
+    "image": "bogdando/devbox:v0.1",
+    "commit": true,
+    "run_command": [
+      "-tid",
+      "--privileged",
+      "-u root",
+      "-v",
+      "/dev:/dev",
+      "-v",
+      "/run:/run",
+      "-v",
+      "/lib/modules:/lib/modules:ro",
+      "-v",
+      "-v /sys/fs/cgroup:/sys/fs/cgroup",
+      "-v /var/lib/libvirt:/var/lib/libvirt",
+      "bogdando/devbox",
+      "/bin/bash"
+    ]
+  }],
+  "provisioners": [{
+    "type": "shell",
+    "execute_command": "{{.Vars}} sh '{{.Path}}'",
+    "scripts": [
+      "script/update.sh",
+      "script/minimize.sh",
+      "script/cleanup.sh"
+    ]
+  }],
+  "post-processors": [
+    [
+      {
+        "type": "docker-tag",
+        "only": ["docker"],
+        "repository": "bogdando/devbox:v0.1",
+        "tag": "latest",
+        "keep_input_artifact": false
+      }
+    ]
+  ]
+}
